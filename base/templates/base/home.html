@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEGO</title>
+</head>
+<body>
+
+    {% extends 'main.html'%}
+    {% block content %}
+    <h1>This is tego</h1>
+    <h3>Tenders of Egyptian Government</h3>
+
+
+    <div>
+        <div style="color: aqua;background-color: black;">
+            {% for room in rooms %}
+                <span>@{{room.topic}}</span>
+                <h4>{{room.id}} - <a href='room/{{room.id}}'>{{room.name}}</a> </h4>
+            {% endfor %}
+        </div>
+    </div>
+    <a href="{% url 'room_form' %}">Create room</a>
+
+    {%endblock content%}
+
+    
+</body>
+</html>
