@@ -41,7 +41,6 @@ def createroom(request):
 def updateroom(request,pk):
     room=Room.objects.get(id=pk)
     print(room) 
-    jkl;
     form=RoomForm(instance=room)
     context={'form':form}
     return render(request,'base/room_form.html',context)
