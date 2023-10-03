@@ -17,6 +17,8 @@
         <div style="color: aqua;background-color: black;">
             {% for room in rooms %}
                 <a href="{% url 'room_update' room.id  %}">Edit</a>
+                <a href="{% url 'room_delete' room.id  %}">Delete</a>
+
                 <span>@{{room.topic}}</span>
                 <h4>{{room.id}} - <a href='room/{{room.id}}'>{{room.name}}</a> </h4>
             {% endfor %}
