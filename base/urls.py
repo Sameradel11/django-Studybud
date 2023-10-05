@@ -10,7 +10,12 @@ urlpatterns = [
 
     path('room_form',views.createroom , name="room_form"),
 
+    path('login',views.loginpage,name='login'),
+
+    path('logout',views.logoutpage,name='logout'),
+
     path('room_update/<str:pk>',views.updateroom , name="room_update"),
+
     path('room_delete/<str:pk>',views.deleteroom , name="room_delete"),
 
 

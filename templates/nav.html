@@ -1,3 +1,11 @@
 <a href="/"> Logo </a>
+<div>
 
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'logout' %}" >Log Out</a>
+    {% else %}
+    <a href="{% url 'login' %}"  >Log in</a>
+    {% endif %}
+
+</div>
 <hr>

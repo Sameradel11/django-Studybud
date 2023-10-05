@@ -9,25 +9,46 @@
 
     {% extends 'main.html'%}
     {% block content %}
-    <h1>This is tego</h1>
-    <h3>Tenders of Egyptian Government</h3>
 
+    <style>
+        .home_container{
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            
+        }
+    </style>
 
-    <div>
-        <div style="color: aqua;background-color: black;">
+    <div class="home_container">
+
+        <div class="sidebar">
+            <h3>Browse Topics</h3>
+            <a href="{% url 'home' %}">All</a>
+            <hr>
+
+            {% for topic in topics %}
+                <a href="{% url 'home' %}?q={{topic.name}}">{{ topic.name }}</a>
+            <hr>
+            {% endfor %}
+        </div>
+
+        <div style="color: aqua;">
+            <h3> {{roomcount}} Rooms Available</h3>
+            <div>
+                <a href="{% url 'room_form' %}">Create room</a>
+            </div>
+            <div>
             {% for room in rooms %}
                 <a href="{% url 'room_update' room.id  %}">Edit</a>
                 <a href="{% url 'room_delete' room.id  %}">Delete</a>
-
-                <span>@{{room.topic}}</span>
+                <span>@{{room.host}}</span>
                 <h4>{{room.id}} - <a href='room/{{room.id}}'>{{room.name}}</a> </h4>
+                <hr>
             {% endfor %}
+            </div>
         </div>
     </div>
-    <a href="{% url 'room_form' %}">Create room</a>
 
     {%endblock content%}
 
-    
 </body>
 </html>
