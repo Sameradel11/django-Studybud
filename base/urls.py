@@ -18,6 +18,9 @@ urlpatterns = [
 
     path('room_delete/<str:pk>',views.deleteroom , name="room_delete"),
 
+    path('register',views.register , name="register"),
+
+
 
 
 

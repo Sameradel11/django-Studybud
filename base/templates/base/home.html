@@ -8,7 +8,7 @@
 <body>
 
     {% extends 'main.html'%}
-    {% block content %}
+    {% block content %} 
 
     <style>
         .home_container{
@@ -36,15 +36,22 @@
             <div>
                 <a href="{% url 'room_form' %}">Create room</a>
             </div>
+            
             <div>
+                <h1>{{request.user}} </h1>
+
             {% for room in rooms %}
+                {% if request.user == room.host %}
                 <a href="{% url 'room_update' room.id  %}">Edit</a>
                 <a href="{% url 'room_delete' room.id  %}">Delete</a>
+                {% endif %}
+
                 <span>@{{room.host}}</span>
                 <h4>{{room.id}} - <a href='room/{{room.id}}'>{{room.name}}</a> </h4>
                 <hr>
             {% endfor %}
             </div>
+
         </div>
     </div>
 
