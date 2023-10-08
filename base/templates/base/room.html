@@ -5,8 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room</title>
 </head>
+<style>
+    .room-content{
+        display: grid;
+        grid-template-columns: 3fr 1fr ;
+    }
+</style>
 <body>
-    <h1> the room is {{requestedroom.name}} and it's id is {{requestedroom.id}}</h1>
-    <h2> And it's description is {{requestedroom.description}}</h2>
+    <div class="room-content">
+        <div class="left side">
+            <h1> the room is {{requestedroom.name}} and it's id is {{requestedroom.id}}</h1>
+            <h2> And it's description is {{requestedroom.description}}</h2>
+            <h1> Messages are</h1>
+
+            <div class="show-message-container">
+                {% for message in messages %}
+                <a href=" {% url 'message_delete' message.id  %}">remove</a>
+                <small>@{{message.user}} {{message.created|timesince}}</small>
+                <h4>{{message.body}} --{{message.id}}</h4>
+                <hr>
+                {% endfor %}
+            </div>
+
+            <div class="add-message-container">
+                {% if request.user.is_authenticated %}
+                    <div class="comment-form">
+                        <form method="POST" action="">
+                            {% csrf_token %} 
+                            <input type="text" name="body" placeholder="Write your message here....">
+                        </form>
+                    </div>
+                {% else %}
+                    <h1> you can't type a message </h1>
+                    <a href="{% url 'login' %}?next={{request.path}}"> Sign in </a>
+                    <h2>{{ request.path }}</h2>
+                {% endif %}
+            </div>
+        </div>
+
+        <div>
+            <h3>Participants</h3>
+
+            {% for participant in participants %}
+                <h4>@{{ participant.username }}</h4>
+                <hr>
+                {% endfor %}
+        </div>
+    </div>
+
+
 </body>
 </html>

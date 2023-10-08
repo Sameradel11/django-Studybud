@@ -20,6 +20,9 @@ urlpatterns = [
 
     path('register',views.register , name="register"),
 
+    path('message_delete/<str:pk>',views.deletemessage , name="message_delete"),
+
+
 
 
 

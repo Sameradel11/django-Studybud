@@ -5,9 +5,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.db.models import Q
-from .models import Room,Topic
+from .models import Room,Topic,Message
 from django.contrib import messages
-from .forms import RoomForm
+from .forms import RoomForm,MessageForm
 
 
 
@@ -23,7 +23,7 @@ def home(request):
     rooms=Room.objects.filter(
     Q(topic__name__icontains=q)|
     Q(description__icontains=q)|
-    Q(name__icontains=q))
+    Q(name__icontains=q))  
     topics=Topic.objects.all()
     context={'rooms':rooms,'topics':topics,'roomcount':len(rooms)}
     return render(request,'base/home.html',context)
@@ -31,13 +31,28 @@ def home(request):
 
 def room(request,pk):
     requestedroom=Room.objects.get(id=pk)
-    currentroom={'requestedroom':requestedroom}
+    messages=requestedroom.message_set.all().order_by('-created')
+    participants=requestedroom.participants.all()
+    if(request.method=='POST'):
+        message=Message.objects.create(
+            user=request.user,
+            room=requestedroom,
+            body=request.POST.get("body")
+        )
+        requestedroom.participants.add(request.user)
+        message.save()
+        print(message)
+        return redirect(request.path)
+    currentroom={'requestedroom':requestedroom,'messages':messages,"participants":participants}
     return render(request,'base/room.html',currentroom)
-    
+
+
+################ CRUD room ################
 @login_required(login_url='login')
 def createroom(request):
     if request.method=="POST":
         form =RoomForm(request.POST)
+        print(request.POST)
         if form.is_valid():
             form.save()
             return redirect('home')
@@ -51,7 +66,6 @@ def updateroom(request,pk):
     room=Room.objects.get(id=pk)
     if request.user!=room.host:
         return HttpResponse("You are not allowed to be here")
-
     print(room) 
     if request.method=="POST":
         form=RoomForm(request.POST,instance=room)
@@ -76,6 +90,9 @@ def deleteroom(request,pk):
     context={'room':room}
     return render(request,'base/delete.html',context)
 
+
+
+################ Registeration ################
 def loginpage(request):
     if request.method=="POST":
         username=request.POST.get('username')
@@ -87,6 +104,7 @@ def loginpage(request):
             user=authenticate(request,username=username,password=password)
             if user is not None:
                 login(request,user)
+                print(request.path)
                 return redirect('home')
             else :
                 messages.error(request, "There is a problem")
@@ -114,3 +132,20 @@ def register(request):
     form=UserCreationForm()
     context={'form':form}
     return render(request,'base/register.html',context)
+
+################ CRUD Message ################
+def deletemessage(request,pk):
+    pk=int(pk)
+    message=Message.objects.get(id=pk)
+    room=message.room.id
+    print(room)
+    if request.user!=message.user:
+        return HttpResponse("You are not allowed to be here")
+
+    if request.method=="POST":
+        print('entered post')
+        message.delete()
+        return redirect('room',pk=room)
+    context={'message':message}
+    return render(request,'base/delete_message.html',context)
+
