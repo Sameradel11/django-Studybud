@@ -149,3 +149,13 @@ def deletemessage(request,pk):
     context={'message':message}
     return render(request,'base/delete_message.html',context)
 
+def editmessage(request,pk):
+    message=Message.objects.get(id=pk)
+    if request.user!=message.user:
+        return HttpResponse("You are not allowed to be here")
+    if request.method=="POST":
+        message.body=request.POST.get('body')
+        message.save()
+        return redirect('room',pk=message.room.id)
+    context={'message':message}
+    return render(request,'base/edit_message.html',context)

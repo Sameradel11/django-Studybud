@@ -22,6 +22,9 @@ urlpatterns = [
 
     path('message_delete/<str:pk>',views.deletemessage , name="message_delete"),
 
+    path('message_edit/<str:pk>',views.editmessage , name="message_edit"),
+
+
 
 
 
