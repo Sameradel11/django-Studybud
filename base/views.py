@@ -25,7 +25,8 @@ def home(request):
     Q(description__icontains=q)|
     Q(name__icontains=q))  
     topics=Topic.objects.all()
-    context={'rooms':rooms,'topics':topics,'roomcount':len(rooms)}
+    messages=Message.objects.filter(Q(room__topic__name__icontains=q)) 
+    context={'rooms':rooms,'topics':topics,'roomcount':len(rooms),"messages":messages}
     return render(request,'base/home.html',context)
 
 
@@ -41,7 +42,6 @@ def room(request,pk):
         )
         requestedroom.participants.add(request.user)
         message.save()
-        print(message)
         return redirect(request.path)
     currentroom={'requestedroom':requestedroom,'messages':messages,"participants":participants}
     return render(request,'base/room.html',currentroom)
@@ -52,7 +52,6 @@ def room(request,pk):
 def createroom(request):
     if request.method=="POST":
         form =RoomForm(request.POST)
-        print(request.POST)
         if form.is_valid():
             form.save()
             return redirect('home')
@@ -66,7 +65,7 @@ def updateroom(request,pk):
     room=Room.objects.get(id=pk)
     if request.user!=room.host:
         return HttpResponse("You are not allowed to be here")
-    print(room) 
+
     if request.method=="POST":
         form=RoomForm(request.POST,instance=room)
         if form.is_valid():
@@ -99,18 +98,14 @@ def loginpage(request):
         password=request.POST.get('password')
         try:
             user=User.objects.get(username=username)
-            print(username)
-            print(password)
             user=authenticate(request,username=username,password=password)
             if user is not None:
                 login(request,user)
-                print(request.path)
                 return redirect('home')
             else :
                 messages.error(request, "There is a problem")
         except:
             messages.error(request, "User not exist")
-            print("Except")
     return render(request,'base/login.html')
 
 def logoutpage(request):
@@ -125,7 +120,7 @@ def register(request):
             user.username=user.username.lower()
             user.save()
             login(request,user)
-            print(user)
+
             return redirect('home')
         else :
             messages.error(request, "There is a problem")
@@ -138,12 +133,10 @@ def deletemessage(request,pk):
     pk=int(pk)
     message=Message.objects.get(id=pk)
     room=message.room.id
-    print(room)
     if request.user!=message.user:
         return HttpResponse("You are not allowed to be here")
 
     if request.method=="POST":
-        print('entered post')
         message.delete()
         return redirect('room',pk=room)
     context={'message':message}

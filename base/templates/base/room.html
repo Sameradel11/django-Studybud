@@ -12,6 +12,7 @@
     }
 </style>
 <body>
+    {% include 'main.html'%}
     <div class="room-content">
         <div class="left side">
             <h1> the room is {{requestedroom.name}} and it's id is {{requestedroom.id}}</h1>
@@ -55,7 +56,6 @@
                 {% endfor %}
         </div>
     </div>
-
 
 </body>
 </html>
