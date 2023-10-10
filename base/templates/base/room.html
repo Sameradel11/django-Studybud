@@ -1,18 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Room</title>
-</head>
-<style>
-    .room-content{
-        display: grid;
-        grid-template-columns: 3fr 1fr ;
-    }
-</style>
-<body>
-    {% include 'main.html'%}
+    {% extends 'main.html'%}
+    {% block content %}
     <div class="room-content">
         <div class="left side">
             <h1> the room is {{requestedroom.name}} and it's id is {{requestedroom.id}}</h1>
@@ -48,14 +35,7 @@
         </div>
 
         <div>
-            <h3>Participants</h3>
-
-            {% for participant in participants %}
-                <h4>@{{ participant.username }}</h4>
-                <hr>
-                {% endfor %}
+            {% include 'base/activity_component.html' %}
         </div>
     </div>
-
-</body>
-</html>
+    {% endblock content %}f
