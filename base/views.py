@@ -152,3 +152,12 @@ def editmessage(request,pk):
         return redirect('room',pk=message.room.id)
     context={'message':message}
     return render(request,'base/edit_message.html',context)
+
+################ profile ################
+def profile(request,pk):
+    user=User.objects.get(id=pk) 
+    rooms=user.room_set.all()
+    messages=user.message_set.all()
+    topics=Topic.objects.all()
+    context={"user":user,"rooms":rooms,"messages":messages,'topics':topics}
+    return render(request,'base/profile.html',context)

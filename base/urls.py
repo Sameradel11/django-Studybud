@@ -24,6 +24,8 @@ urlpatterns = [
 
     path('message_edit/<str:pk>',views.editmessage , name="message_edit"),
 
+    path('profile/<str:pk>',views.profile,name='profile')
+
 
 
 

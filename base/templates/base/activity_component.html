@@ -3,7 +3,6 @@
     {% for message in messages %}
     <diV>
         <small>{{ message.created |timesince }} @{{ message.user }} replied to {{ message.room }} </small>
-
     </diV>
     
     <h5> {{ message }} </h5>
