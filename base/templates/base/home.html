@@ -1,19 +1,15 @@
-    {% extends 'main.html' %} 
-    {% block content%}
-    <div class="home_container">
+{% extends 'main.html' %}
+{% block content %}
+<main class="layout layout--3">
+    <div class="container">
+      <!-- Topics Start -->
+      {% include 'base/sidebar.html' %}
 
-        {% include "base/sidebar.html" %}
+      <!-- Room List Start -->
+      {% include 'base/feed.html' %}
 
-        <div style="color: aqua;">
-
-            <h3> {{roomcount}} Rooms Available</h3>
-            <div>
-                <a href="{% url 'room_form' %}">Create room</a>
-            </div>
-            
-            {% include 'base/feed.html' %}
-
-        </div>
-        {% include 'base/activity_component.html' %}
+      <!-- Activities Start -->
+    {% include 'base/activity_component.html' %}
     </div>
-    {% endblock content %}
+  </main>
+  {% endblock content %}
