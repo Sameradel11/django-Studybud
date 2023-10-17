@@ -44,7 +44,7 @@ def room(request,pk):
         requestedroom.participants.add(request.user)
         message.save()
         return redirect(request.path)
-    currentroom={'requestedroom':requestedroom,'messages':messages,"participants":participants}
+    currentroom={'room':requestedroom,'messages':messages,"participants":participants}
     return render(request,'base/room.html',currentroom)
 
 
@@ -52,13 +52,20 @@ def room(request,pk):
 @login_required(login_url='login')
 def createroom(request):
     if request.method=="POST":
-        form =RoomForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('home')
-
-    form=RoomForm()
-    context={'form':form}
+        topic_name=request.POST.get("topic")
+        topic,created=Topic.objects.get_or_create(name=topic_name)
+        print(topic)
+        room=Room.objects.create(
+            name=request.POST.get("room_name"),
+            host=request.user,
+            description=request.POST.get("room_about"),
+            topic=topic,
+        )
+        room.participants.add(request.user)
+        room.save()
+        return redirect('home')
+    topics=Topic.objects.all()
+    context={'topics':topics}
     return render(request,'base/room_form.html',context)
 
 @login_required(login_url='login')
@@ -88,7 +95,7 @@ def deleteroom(request,pk):
         room.delete()
         return redirect('home')
     context={'room':room}
-    return render(request,'base/delete.html',context)
+    return render(request,'base/delete_room.html',context)
 
 
 
@@ -115,19 +122,20 @@ def logoutpage(request):
 
 def register(request):
     if request.method=="POST":
-        form=UserCreationForm(request.POST)
-        if form.is_valid():
-            user=form.save(commit=False)
-            user.username=user.username.lower()
-            user.save()
-            login(request,user)
+        if(request.POST.get("password")!=request.POST.get("confirm_password")):
+            print("NO")
+        else:
+            newuser=User.objects.create(
+            username=request.POST.get("username"),
+            password=request.POST.get("password")
+            )
+            newuser.save()
+            login(request,newuser)
+    return render(request,'base/signup.html')
 
-            return redirect('home')
-        else :
-            messages.error(request, "There is a problem")
-    form=UserCreationForm()
-    context={'form':form}
-    return render(request,'base/register.html',context)
+def edituser(request):
+    return render(request,'base/edit-user.html')
+
 
 ################ CRUD Message ################
 def deletemessage(request,pk):
@@ -162,3 +170,7 @@ def profile(request,pk):
     topics=Topic.objects.all()
     context={"user":user,"rooms":rooms,"messages":messages,'topics':topics}
     return render(request,'base/profile.html',context)
+
+
+def settings(request):
+    return render(request,'base/settings.html')

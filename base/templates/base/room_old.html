@@ -1,0 +1,41 @@
+    {% extends 'main.html'%}
+    {% block content %}
+    <div class="room-content">
+        <div class="left side">
+            <h1> the room is {{requestedroom.name}} and it's id is {{requestedroom.id}}</h1>
+            <h2> And it's description is {{requestedroom.description}}</h2>
+            <h1> Messages are</h1>
+
+            <div class="show-message-container">
+                {% for message in messages %}
+                {% if message.user == request.user %}
+                <a href=" {% url 'message_delete' message.id  %}">remove</a>
+                <a href="{% url 'message_edit' message.id %}">edit</a>
+                {% endif %}
+                <small>@{{message.user}} {{message.created|timesince}}</small>
+                <h4>{{message.body}} --{{message.id}}</h4>
+                <hr>
+                {% endfor %}
+            </div>
+
+            <div class="add-message-container">
+                {% if request.user.is_authenticated %}
+                    <div class="comment-form">
+                        <form method="POST" action="">
+                            {% csrf_token %} 
+                            <input type="text" name="body" placeholder="Write your message here....">
+                        </form>
+                    </div>
+                {% else %}
+                    <h1> you can't type a message </h1>
+                    <a href="{% url 'login' %}?next={{request.path}}"> Sign in </a>
+                    <h2>{{ request.path }}</h2>
+                {% endif %}
+            </div>
+        </div>
+
+        <div>
+            {% include 'base/activity_component.html' %}
+        </div>
+    </div>
+    {% endblock content %}f

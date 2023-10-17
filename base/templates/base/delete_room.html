@@ -21,11 +21,13 @@
                     <form class="form" method="POST">
                     {% csrf_token %}
                         <div class="form__group">
-                            <p>Are you sure you want to delete "{{message.body}}" ?</p>
+                            <p>Are you sure you want to delete "{{room.name}}" ?</p>
                         </div>
+
                         <div class="for__group">
                             <input class="btn btn--main" type="submit" value="Confirm" />
                         </div>
+
                     </form>
                 </div>
             </div>

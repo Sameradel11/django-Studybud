@@ -5,23 +5,37 @@
         <div class="layout__box">
           <div class="layout__boxHeader">
             <div class="layout__boxTitle">
-              <h3>Login</h3>
+              <h3>Sign up</h3>
             </div>
           </div>
           <div class="layout__body">
             <h2 class="auth__tagline">Find your study partner</h2>
 
-            <form class="form" action="#" method="POST" >
+            <form class="form" action="#" method="POST">
               {% csrf_token %}
+              <div class="form__group form__group">
+                <label for="fullname">Full Name</label>
+                <input id="fullname" name="fullname" type="text" placeholder="e.g. Dennis Ivy" />
+              </div>
               <div class="form__group form__group">
                 <label for="room_name">Username</label>
                 <input id="username" name="username" type="text" placeholder="e.g. dennis_ivy" />
               </div>
               <div class="form__group">
-                <label for="pas]sword">Password</label>
+                <label for="password">Password</label>
                 <input
                   id="password"
                   name="password"
+                  type="password"
+                  placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                />
+              </div>
+
+              <div class="form__group">
+                <label for="confirm_password">Confirm Password</label>
+                <input
+                  id="confirm_password"
+                  name="confirm_password"
                   type="password"
                   placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
                 />
@@ -43,14 +57,13 @@
                     d="M15 21.694v4.306h2v-4.306c0.587-0.348 1-0.961 1-1.694 0-1.105-0.895-2-2-2s-2 0.895-2 2c0 0.732 0.413 1.345 1 1.694z"
                   ></path>
                 </svg>
-
-                Login
+                Sign Up
               </button>
             </form>
 
             <div class="auth__action">
-              <p>Haven't signed up yet?</p>
-              <a href="{% url 'register' %}" class="btn btn--link">Sign Up</a>
+              <p>Already have an account?</p>
+              <a href="{% url 'login' %}" class="btn btn--link">Log In</a>
             </div>
           </div>
         </div>
