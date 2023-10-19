@@ -30,3 +30,4 @@ class Message(models.Model):
         return self.body[:50]
     class Meta:
         ordering=['-updated','-created']
+

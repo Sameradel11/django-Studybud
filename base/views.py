@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.db.models import Q
 from .models import Room,Topic,Message
 from django.contrib import messages
-from .forms import RoomForm,MessageForm
+from .forms import RoomForm,MessageForm,UserForm
 
 
 
@@ -126,6 +126,7 @@ def register(request):
             print("NO")
         else:
             newuser=User.objects.create(
+            first_name=request.POST.get("fullname"),
             username=request.POST.get("username"),
             password=request.POST.get("password")
             )
@@ -134,7 +135,16 @@ def register(request):
     return render(request,'base/signup.html')
 
 def edituser(request):
-    return render(request,'base/edit-user.html')
+    form=UserForm(instance=request.user)
+    context={"form":form}
+    if request.method=='POST':
+        print("Entered")
+        form=UserForm(request.POST,instance=request.user)
+        if form.is_valid():
+            print("Valid")
+            form.save()
+            return redirect('profile',pk=request.user.id)
+    return render(request,'base/edit-user.html',context)
 
 
 ################ CRUD Message ################

@@ -1,8 +1,6 @@
-
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -11,17 +9,10 @@
     <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
     <title>StudyBuddy - Find study partners around the world!</title>
   </head>
-
-
-
   <body>
-
   {% include 'nav.html' %}
-
-
   {% block content %}
   {% endblock %} 
-
     <script src="{% static 'js/script.js' %}"></script>
   </body>
 </html>
